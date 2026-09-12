@@ -6,42 +6,54 @@ services:
     image: postgres:16-alpine
     environment: { POSTGRES_DB: auth_db, POSTGRES_USER: resolvenow, POSTGRES_PASSWORD: resolvenow }
     volumes: [auth-data:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U resolvenow -d auth_db"], interval: 5s, timeout: 5s, retries: 10 }
   complaint-db:
     image: postgres:16-alpine
     environment: { POSTGRES_DB: complaint_db, POSTGRES_USER: resolvenow, POSTGRES_PASSWORD: resolvenow }
     volumes: [complaint-data:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U resolvenow -d complaint_db"], interval: 5s, timeout: 5s, retries: 10 }
   assignment-db:
     image: postgres:16-alpine
     environment: { POSTGRES_DB: assignment_db, POSTGRES_USER: resolvenow, POSTGRES_PASSWORD: resolvenow }
     volumes: [assignment-data:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U resolvenow -d assignment_db"], interval: 5s, timeout: 5s, retries: 10 }
   notification-db:
     image: postgres:16-alpine
     environment: { POSTGRES_DB: notification_db, POSTGRES_USER: resolvenow, POSTGRES_PASSWORD: resolvenow }
     volumes: [notification-data:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U resolvenow -d notification_db"], interval: 5s, timeout: 5s, retries: 10 }
   auth-service:
     build: { context: ., args: { MODULE: auth-service } }
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/auth_db
       EUREKA_URL: http://eureka-server:8761/eureka
-    depends_on: [auth-db, eureka-server]
+    depends_on:
+      auth-db: { condition: service_healthy }
+      eureka-server: { condition: service_started }
   complaint-service:
     build: { context: ., args: { MODULE: complaint-service } }
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://complaint-db:5432/complaint_db
       EUREKA_URL: http://eureka-server:8761/eureka
-    depends_on: [complaint-db, eureka-server]
+    depends_on:
+      complaint-db: { condition: service_healthy }
+      eureka-server: { condition: service_started }
   assignment-service:
     build: { context: ., args: { MODULE: assignment-service } }
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://assignment-db:5432/assignment_db
       EUREKA_URL: http://eureka-server:8761/eureka
-    depends_on: [assignment-db, eureka-server]
+    depends_on:
+      assignment-db: { condition: service_healthy }
+      eureka-server: { condition: service_started }
   notification-service:
     build: { context: ., args: { MODULE: notification-service } }
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://notification-db:5432/notification_db
       EUREKA_URL: http://eureka-server:8761/eureka
-    depends_on: [notification-db, eureka-server]
+    depends_on:
+      notification-db: { condition: service_healthy }
+      eureka-server: { condition: service_started }
   api-gateway:
     build: { context: ., args: { MODULE: api-gateway } }
     environment:
