@@ -1,0 +1,3 @@
+package com.resolvenow.assignment;
+import jakarta.persistence.*; import java.time.Instant;
+@Entity public class Assignment { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id; @Column(nullable=false,unique=true) private Long complaintId; private String department; private String agent; private Instant assignedAt=Instant.now(); protected Assignment(){} public Assignment(Long complaintId,String department,String agent){this.complaintId=complaintId;this.department=department;this.agent=agent;} public Long getId(){return id;} public Long getComplaintId(){return complaintId;} public String getDepartment(){return department;} public String getAgent(){return agent;} }

@@ -1,0 +1,3 @@
+package com.resolvenow.assignment;
+import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/assignments") public class AssignmentController { private final AssignmentService service; public AssignmentController(AssignmentService service){this.service=service;} public record Request(Long complaintId,String customerEmail,String department,String agent){} @GetMapping public List<Assignment> all(){return service.all();} @PostMapping public Assignment assign(@RequestBody Request request){return service.assign(request.complaintId(),request.customerEmail(),request.department()==null?"Customer Service":request.department(),request.agent()==null?"Unassigned":request.agent());} }

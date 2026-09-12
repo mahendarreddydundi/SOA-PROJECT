@@ -1,0 +1,3 @@
+package com.resolvenow.notification;
+import org.slf4j.*; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/notifications") public class NotificationController { private static final Logger log=LoggerFactory.getLogger(NotificationController.class); private final NotificationRepository repository; public NotificationController(NotificationRepository repository){this.repository=repository;} @GetMapping public List<Notification> all(){return repository.findAll();} @PostMapping public Notification send(@RequestBody Notification input){log.info("ResolveNow alert to {}: {}",input.getRecipient(),input.getMessage());return repository.save(input);} }

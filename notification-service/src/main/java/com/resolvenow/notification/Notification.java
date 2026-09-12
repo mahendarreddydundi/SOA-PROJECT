@@ -1,0 +1,3 @@
+package com.resolvenow.notification;
+import jakarta.persistence.*; import java.time.Instant;
+@Entity public class Notification { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id; private Long complaintId; private String recipient; @Column(length=2000) private String message; private Instant sentAt=Instant.now(); protected Notification(){} public Notification(Long complaintId,String recipient,String message){this.complaintId=complaintId;this.recipient=recipient;this.message=message;} public Long getId(){return id;} public Long getComplaintId(){return complaintId;} public String getRecipient(){return recipient;} public String getMessage(){return message;} public Instant getSentAt(){return sentAt;} }

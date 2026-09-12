@@ -1,0 +1,24 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/auth_db}
+    username: ${SPRING_DATASOURCE_USERNAME:resolvenow}
+    password: ${SPRING_DATASOURCE_PASSWORD:resolvenow}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  cloud:
+    discovery:
+      enabled: true
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+security:
+  jwt:
+    secret: ${JWT_SECRET:ResolveNow-development-secret-key-change-me-123456}
+    expiration-ms: ${JWT_EXPIRATION_MS:3600000}
