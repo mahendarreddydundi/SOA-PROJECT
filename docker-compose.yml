@@ -1,6 +1,7 @@
 services:
   eureka-server:
     build: { context: ., args: { MODULE: eureka-server } }
+    restart: on-failure
     ports: ["8761:8761"]
   auth-db:
     image: postgres:16-alpine
@@ -24,6 +25,7 @@ services:
     healthcheck: { test: ["CMD-SHELL", "pg_isready -U resolvenow -d notification_db"], interval: 5s, timeout: 5s, retries: 10 }
   auth-service:
     build: { context: ., args: { MODULE: auth-service } }
+    restart: on-failure
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/auth_db
       EUREKA_URL: http://eureka-server:8761/eureka
@@ -32,6 +34,7 @@ services:
       eureka-server: { condition: service_started }
   complaint-service:
     build: { context: ., args: { MODULE: complaint-service } }
+    restart: on-failure
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://complaint-db:5432/complaint_db
       EUREKA_URL: http://eureka-server:8761/eureka
@@ -40,6 +43,7 @@ services:
       eureka-server: { condition: service_started }
   assignment-service:
     build: { context: ., args: { MODULE: assignment-service } }
+    restart: on-failure
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://assignment-db:5432/assignment_db
       EUREKA_URL: http://eureka-server:8761/eureka
@@ -48,6 +52,7 @@ services:
       eureka-server: { condition: service_started }
   notification-service:
     build: { context: ., args: { MODULE: notification-service } }
+    restart: on-failure
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://notification-db:5432/notification_db
       EUREKA_URL: http://eureka-server:8761/eureka
@@ -56,6 +61,7 @@ services:
       eureka-server: { condition: service_started }
   api-gateway:
     build: { context: ., args: { MODULE: api-gateway } }
+    restart: on-failure
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka
     ports: ["8080:8080"]

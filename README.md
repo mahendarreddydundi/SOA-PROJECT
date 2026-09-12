@@ -16,7 +16,20 @@ mvn -DskipTests package
 docker compose up --build
 ```
 
+If the Docker environment blocks container-to-container bridge traffic, use the host-network override instead:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.host.yml up --build
+```
+
 5. Open port `8080` from the Ports panel. The API Gateway is the client entry point.
+Verify it is ready before making API requests:
+
+```bash
+curl http://localhost:8080/actuator/health
+```
+
+The expected response is `{"status":"UP"}`. The gateway is an API entry point, so opening `/` directly does not display a web page.
 
 Useful endpoints:
 

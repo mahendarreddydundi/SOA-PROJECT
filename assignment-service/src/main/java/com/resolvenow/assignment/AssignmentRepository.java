@@ -1,3 +1,4 @@
 package com.resolvenow.assignment;
 import org.springframework.data.jpa.repository.JpaRepository;
-public interface AssignmentRepository extends JpaRepository<Assignment,Long> {}
+import java.util.Optional;
+public interface AssignmentRepository extends JpaRepository<Assignment,Long> { Optional<Assignment> findByComplaintId(Long complaintId); }
