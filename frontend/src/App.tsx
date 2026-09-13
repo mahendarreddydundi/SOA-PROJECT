@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Activity, ArrowRight, Bell, CirclePlus, ClipboardList, LogOut, RefreshCw, Search, ShieldCheck, UserRound, X } from 'lucide-react'
 import './App.css'
@@ -27,22 +27,22 @@ function App() {
   const [filter, setFilter] = useState<'ALL' | Complaint['status']>('ALL')
   const [view, setView] = useState<WorkspaceView>('overview')
 
-  const request = async (path: string, options: RequestInit = {}) => {
+  const request = useCallback(async (path: string, options: RequestInit = {}) => {
     const response = await fetch(`${API}${path}`, { ...options, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, ...options.headers } })
     if (!response.ok) throw new Error((await response.text()) || `Request failed: ${response.status}`)
     return response.status === 204 ? null : response.json()
-  }
+  }, [token])
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!token) return
     setLoading(true)
     try {
       const [complaintData, assignmentData, notificationData] = await Promise.all([request('/complaints'), request('/assignments'), request('/notifications')])
       setComplaints(complaintData); setAssignments(assignmentData); setNotifications(notificationData); setNotice('Live data refreshed')
     } catch (error) { setNotice(error instanceof Error ? error.message : 'Unable to load service data') } finally { setLoading(false) }
-  }
+  }, [request, token])
 
-  useEffect(() => { loadData() }, [token])
+  useEffect(() => { loadData() }, [loadData])
 
   const authenticate = async (event: FormEvent) => {
     event.preventDefault(); setAuthError('')

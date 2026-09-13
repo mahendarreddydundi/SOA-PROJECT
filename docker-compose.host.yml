@@ -47,3 +47,8 @@ services:
     ports: []
     environment:
       EUREKA_URL: http://localhost:8761/eureka
+  frontend:
+    network_mode: host
+    ports: []
+    volumes:
+      - ./frontend/nginx.host.conf:/etc/nginx/conf.d/default.conf:ro

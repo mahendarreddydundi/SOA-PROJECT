@@ -1,6 +1,6 @@
 # ResolveNow Backend
 
-ResolveNow is a Java 17, Spring Boot, PostgreSQL microservices backend. It contains Eureka, Gateway, Auth, Complaint, Assignment, and Notification services. There is no TypeScript or frontend framework in this repository.
+ResolveNow is a Java 17, Spring Boot, PostgreSQL microservices platform with a React and TypeScript operations console. It contains Eureka, Gateway, Auth, Complaint, Assignment, and Notification services.
 
 ## Recommended: GitHub Codespaces
 
@@ -22,6 +22,8 @@ If the Docker environment blocks container-to-container bridge traffic, use the 
 docker compose -f docker-compose.yml -f docker-compose.host.yml up --build
 ```
 
+The host-network fallback also serves the frontend on `http://localhost:5173`.
+
 5. Open port `8080` from the Ports panel. The API Gateway is the client entry point.
 Verify it is ready before making API requests:
 
@@ -30,6 +32,18 @@ curl http://localhost:8080/actuator/health
 ```
 
 The expected response is `{"status":"UP"}`. The gateway is an API entry point, so opening `/` directly does not display a web page.
+
+The Compose frontend is available on port `5173`; open the forwarded `5173` port to use the operations console. It forwards `/api` requests to the Gateway internally.
+
+To run the operations console locally during development, start the frontend in a separate terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The Vite development server proxies `/api` requests to the Gateway at `http://localhost:8080`.
 
 Useful endpoints:
 

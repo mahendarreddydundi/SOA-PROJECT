@@ -66,6 +66,10 @@ services:
       EUREKA_URL: http://eureka-server:8761/eureka
     ports: ["8080:8080"]
     depends_on: [eureka-server, auth-service, complaint-service, assignment-service, notification-service]
+  frontend:
+    build: ./frontend
+    ports: ["5173:80"]
+    depends_on: [api-gateway]
 volumes:
   auth-data:
   complaint-data:
