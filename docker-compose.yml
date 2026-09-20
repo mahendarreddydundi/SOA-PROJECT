@@ -35,6 +35,12 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/auth_db
       EUREKA_URL: http://eureka-server:8761/eureka
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8081/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 60s
     depends_on:
       auth-db: { condition: service_healthy }
       eureka-server: { condition: service_healthy }
@@ -44,6 +50,12 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://complaint-db:5432/complaint_db
       EUREKA_URL: http://eureka-server:8761/eureka
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8082/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 60s
     depends_on:
       complaint-db: { condition: service_healthy }
       eureka-server: { condition: service_healthy }
@@ -53,6 +65,12 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://assignment-db:5432/assignment_db
       EUREKA_URL: http://eureka-server:8761/eureka
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8083/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 60s
     depends_on:
       assignment-db: { condition: service_healthy }
       eureka-server: { condition: service_healthy }
@@ -62,6 +80,12 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://notification-db:5432/notification_db
       EUREKA_URL: http://eureka-server:8761/eureka
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8084/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 60s
     depends_on:
       notification-db: { condition: service_healthy }
       eureka-server: { condition: service_healthy }
@@ -73,10 +97,10 @@ services:
     ports: ["8080:8080"]
     depends_on:
       eureka-server: { condition: service_healthy }
-      auth-service: { condition: service_started }
-      complaint-service: { condition: service_started }
-      assignment-service: { condition: service_started }
-      notification-service: { condition: service_started }
+      auth-service: { condition: service_healthy }
+      complaint-service: { condition: service_healthy }
+      assignment-service: { condition: service_healthy }
+      notification-service: { condition: service_healthy }
   frontend:
     build: ./frontend
     ports: ["5173:80"]

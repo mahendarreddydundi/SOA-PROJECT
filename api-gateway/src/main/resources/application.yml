@@ -15,16 +15,16 @@ spring:
             maxAge: 3600
       routes:
         - id: auth-service
-          uri: lb://auth-service
+          uri: http://auth-service:8081
           predicates: [Path=/auth/**]
         - id: complaint-service
-          uri: lb://complaint-service
+          uri: http://complaint-service:8082
           predicates: [Path=/complaints/**]
         - id: assignment-service
-          uri: lb://assignment-service
+          uri: http://assignment-service:8083
           predicates: [Path=/assignments/**]
         - id: notification-service
-          uri: lb://notification-service
+          uri: http://notification-service:8084
           predicates: [Path=/notifications/**]
 eureka:
   client:
