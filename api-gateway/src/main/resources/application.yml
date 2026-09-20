@@ -5,6 +5,14 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns: ["*"]
+            allowedMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+            allowedHeaders: ["*"]
+            allowCredentials: false
+            maxAge: 3600
       routes:
         - id: auth-service
           uri: lb://auth-service
