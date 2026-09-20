@@ -22,3 +22,12 @@ security:
   jwt:
     secret: ${JWT_SECRET:ResolveNow-development-secret-key-change-me-123456}
     expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
